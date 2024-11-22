@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-from PIL import Image
+from PIL import Image,ImageDraw
 from pytesseract import pytesseract
 
 load_dotenv()
@@ -10,16 +10,12 @@ def test_pytesseract():
     image_path = 'templates\certi.png' 
     image = Image.open(image_path)
     
-    extracted_text = pytesseract.image_to_string(image)
-    
-    print("Extracted Text:")
-    print(extracted_text)
+    data = pytesseract.image_to_data(image, output_type=pytesseract.Output.DICT)
+    for i in range(len(data['text'])):
+        if "name" in data['text'][i].lower():
+            x, y, w, h = data['left'][i], data['top'][i], data['width'][i], data['height'][i]
+            print(f"Word 'name' found at position: ({x}, {y}) with width {w} and height {h}")
+            break
 
 if __name__ == "__main__":
     test_pytesseract()
-
-'''
-im=Image.open("templates\certi.png")
-print(im.format,im.size,im.mode)
-im.show()
-'''
