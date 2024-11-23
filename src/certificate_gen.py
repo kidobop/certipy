@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-from PIL import Image,ImageDraw
+from PIL import Image,ImageDraw,ImageFont
 from pytesseract import pytesseract
 
 load_dotenv()
@@ -18,7 +18,10 @@ def test_pytesseract():
             
             draw=ImageDraw.Draw(image)
             draw.rectangle([x,y,x+w,y+h],fill='white')
-            
+
+            font=ImageFont.truetype("arial.ttf",102)
+            draw.text((x,y),"John Doe",font=font,fill="black")
+
             image.save("output.png")
 
 if __name__ == "__main__":
