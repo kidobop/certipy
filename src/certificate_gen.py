@@ -7,7 +7,7 @@ load_dotenv()
 pytesseract.tesseract_cmd = os.getenv('TESSERACT_CMD')
 
 def test_pytesseract():
-    image_path = 'templates\certi.png' 
+    image_path = r'templates\certi.png' 
     image = Image.open(image_path)
     
     data = pytesseract.image_to_data(image, output_type=pytesseract.Output.DICT)
@@ -15,7 +15,11 @@ def test_pytesseract():
         if "name" in data['text'][i].lower():
             x, y, w, h = data['left'][i], data['top'][i], data['width'][i], data['height'][i]
             print(f"Word 'name' found at position: ({x}, {y}) with width {w} and height {h}")
-            break
+            
+            draw=ImageDraw.Draw(image)
+            draw.rectangle([x,y,x+w,y+h],fill='white')
+            
+            image.save("output.png")
 
 if __name__ == "__main__":
     test_pytesseract()
