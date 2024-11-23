@@ -17,10 +17,17 @@ def test_pytesseract():
             print(f"Word 'name' found at position: ({x}, {y}) with width {w} and height {h}")
             
             draw=ImageDraw.Draw(image)
-            draw.rectangle([x,y,x+w,y+h],fill='white')
+            draw.rectangle([x-50,y,x+w,y+h],fill='white')
 
             font=ImageFont.truetype("arial.ttf",102)
-            draw.text((x,y),"John Doe",font=font,fill="black")
+            new_text = "John Doe"
+            bbox = draw.textbbox((0, 0), new_text, font=font)
+            text_width = bbox[2] - bbox[0]
+            text_height = bbox[3] - bbox[1]
+            text_x = x + (w - text_width) // 2
+            text_y = y + (h - text_height) // 2
+            
+            draw.text((text_x, text_y), new_text, font=font, fill="black")
 
             image.save("output.png")
 
