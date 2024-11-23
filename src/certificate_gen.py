@@ -2,8 +2,10 @@ import os
 from dotenv import load_dotenv
 from PIL import Image,ImageDraw,ImageFont
 from pytesseract import pytesseract
+import pandas as pd
 
 load_dotenv()
+
 pytesseract.tesseract_cmd = os.getenv('TESSERACT_CMD')
 
 def test_pytesseract():
@@ -30,6 +32,9 @@ def test_pytesseract():
             draw.text((text_x, text_y), new_text, font=font, fill="black")
 
             image.save("output.png")
+            test = pd.read_csv(r'templates\names.csv', header=0)
+            for y in range(len(test['name'])):
+                print(test['name'][y])
 
 if __name__ == "__main__":
     test_pytesseract()
