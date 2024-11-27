@@ -8,7 +8,7 @@ load_dotenv()
 
 pytesseract.tesseract_cmd = os.getenv('TESSERACT_CMD')
 
-def test_pytesseract(names, output_folder):
+def generate_certificates(names, output_folder):
     image_path = r'templates\certi.png' 
     image = Image.open(image_path)
     
@@ -42,7 +42,7 @@ def main():
     
     test = pd.read_csv(r'templates\names.csv', header=0)
     for y in range(len(test['name'])):
-        test_pytesseract(test['name'][y], output_folder)
+        generate_certificates(test['name'][y], output_folder)
 
 if __name__ == "__main__":
     main()
