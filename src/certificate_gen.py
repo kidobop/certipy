@@ -1,48 +1,33 @@
+import tkinter as tk
+from tkinter import filedialog, messagebox
+from PIL import Image, ImageTk
 import os
-from dotenv import load_dotenv
-from PIL import Image, ImageDraw, ImageFont
-from pytesseract import pytesseract
-import pandas as pd
 
-load_dotenv()
+class Generate_Certificates:
+    def __init__(self,master):
+        self.master=master
+        self.master.title("Certipy")
+        self.master.geometry("1200x800")
+        self.master.config(bg="#272727")
 
-pytesseract.tesseract_cmd = os.getenv('TESSERACT_CMD')
+        self.button_frame=tk.Frame(self.master,bg="#272727")
+        self.button_frame.pack(side=tk.TOP,fill=tk.X,padx=20,pady=15)
 
-def generate_certificates(names, output_folder):
-    image_path = r'templates\certi.png' 
-    image = Image.open(image_path)
-    
-    data = pytesseract.image_to_data(image, output_type=pytesseract.Output.DICT)
-    for i in range(len(data['text'])):
-        if "name" in data['text'][i].lower():
-            x, y, w, h = data['left'][i], data['top'][i], data['width'][i], data['height'][i]
-            print(f"Word 'name' found at position: ({x}, {y}) with width {w} and height {h}")
-            
-            draw = ImageDraw.Draw(image)
-            draw.rectangle([x-50, y, x+w, y+h], fill='white')
+        self.upload_button=tk.Button(self.button_frame,text="Upload Image",relief="flat",bg="#4CAF50",fg="white",font=("Helvetica",12,"bold"),padx=15,pady=10,activebackground="#45a049")
+        self.upload_button.pack(side=tk.LEFT,padx=10)
 
-            font = ImageFont.truetype("arial.ttf", 102)
-            new_text = names
-            bbox = draw.textbbox((0, 0), new_text, font=font)
-            text_width = bbox[2] - bbox[0]
-            text_height = bbox[3] - bbox[1]
-            text_x = x + (w - text_width) // 2
-            text_y = y + (h - text_height) // 2
-            
-            draw.text((text_x, text_y), new_text, font=font, fill="black")
+        self.clear_button=tk.Button(self.button_frame,text="Clear Image",state=tk.DISABLED,relief="flat",bg="#4CAF50",fg="white",font=("Helvetica",12,"bold"),padx=15,pady=10,activebackground="#45a049")
+        self.clear_button.pack(side=tk.LEFT,padx=10)
 
-            output_path = os.path.join(output_folder, f"{new_text}.png")
-            image.save(output_path)
-            print(f"Saved image: {output_path}")
-            
+        self.canvas=tk.Canvas(self.master,bg="#292929")
+        self.canvas.pack(expand=True, fill=tk.BOTH, padx=20, pady=10)
+
+
 
 def main():
-    output_folder = "output_certificates"
-    os.makedirs(output_folder, exist_ok=True) 
-    
-    test = pd.read_csv(r'templates\names.csv', header=0)
-    for y in range(len(test['name'])):
-        generate_certificates(test['name'][y], output_folder)
+    root=tk.Tk()
+    app=Generate_Certificates(root)
+    root.mainloop()
 
-if __name__ == "__main__":
+if __name__=="__main__":
     main()
