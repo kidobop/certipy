@@ -13,7 +13,7 @@ class Generate_Certificates:
         self.button_frame=tk.Frame(self.master,bg="#272727")
         self.button_frame.pack(side=tk.TOP,fill=tk.X,padx=20,pady=15)
 
-        self.upload_button=tk.Button(self.button_frame,text="Upload Image",relief="flat",bg="#4CAF50",fg="white",font=("Helvetica",12,"bold"),padx=15,pady=10,activebackground="#45a049")
+        self.upload_button=tk.Button(self.button_frame,text="Upload Image",command=self.upload_image,relief="flat",bg="#4CAF50",fg="white",font=("Helvetica",12,"bold"),padx=15,pady=10,activebackground="#45a049")
         self.upload_button.pack(side=tk.LEFT,padx=10)
 
         self.clear_button=tk.Button(self.button_frame,text="Clear Image",state=tk.DISABLED,relief="flat",bg="#4CAF50",fg="white",font=("Helvetica",12,"bold"),padx=15,pady=10,activebackground="#45a049")
@@ -28,7 +28,7 @@ class Generate_Certificates:
         self.rectangles = []
 
         self.coordinate_frame = tk.Frame(self.master,bg="#282828")
-        self.coordinate_frame.pack(side=tk.BOTTOM, fill=tk.X, padx=20, pady=15)
+        self.coordinate_frame.pack(side=tk.BOTTOM, fill=tk.X, padx=20, pady=0)
         
         self.coordinate_label = tk.Label(self.coordinate_frame,text="Bounding Boxes",bg="#292929",font=("Helvetica", 14, "bold"))
         self.coordinate_label.pack(side=tk.TOP,padx=10)
@@ -44,6 +44,9 @@ class Generate_Certificates:
         self.canvas.bind("<ButtonPress-1>", self.start_box)
         self.canvas.bind("<B1-Motion>", self.draw_box)
         self.canvas.bind("<ButtonRelease-1>", self.end_box)
+
+    def upload_image(self):
+        
 
     def start_box(self,event):
         self.start_x = event.x
