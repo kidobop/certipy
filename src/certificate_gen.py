@@ -25,11 +25,25 @@ class Generate_Certificates:
         self.start_x = None
         self.start_y = None
         self.current_rectangle = None
-        self.rectangle = []
+        self.rectangles = []
+
+        self.coordinate_frame = tk.Frame(self.master,bg="#282828")
+        self.coordinate_frame.pack(side=tk.BOTTOM, fill=tk.X, padx=20, pady=15)
+        
+        self.coordinate_label = tk.Label(self.coordinate_frame,text="Bounding Boxes",bg="#292929",font=("Helvetica", 14, "bold"))
+        self.coordinate_label.pack(side=tk.TOP,padx=10)
+        self.coordinate_listbox = tk.Listbox(self.coordinate_frame,height=5,font=("Helvetica", 12),bg="#272727",fg="white",
+            selectmode=tk.SINGLE,bd=0, highlightthickness=0,activestyle="none",relief="flat")
+        self.coordinate_listbox.pack(side=tk.TOP, fill=tk.X, padx=10, pady=5)
+        self.scrollbar = tk.Scrollbar(self.coordinate_listbox)
+        self.scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        self.coordinate_listbox.config(yscrollcommand=self.scrollbar.set)
+        self.scrollbar.config(command=self.coordinate_listbox.yview)
+
 
         self.canvas.bind("<ButtonPress-1>", self.start_box)
         self.canvas.bind("<B1-Motion>", self.draw_box)
-        #self.canvas.bind("<ButtonRelease-1>", self.end_box)
+        self.canvas.bind("<ButtonRelease-1>", self.end_box)
 
     def start_box(self,event):
         self.start_x = event.x
@@ -40,10 +54,16 @@ class Generate_Certificates:
         curX,curY = event.x,event.y
         self.canvas.coords(self.current_rectangle,self.start_x,self.start_y,curX,curY)
 
+    def end_box(self,event):
+        coords=self.canvas.coords(self.current_rectangle)
+        x1,y1,x2,y2 = [int(coord) for coord in coords]
+        x1,x2 = min(x1,x2),max(x1,x2)
+        y1,y2 = min(y1,y2),max(y1,y2)
+        self.rectangles.append((x1,y1,x2,y2))
+        self.coordinate_listbox.insert(tk.END, f"Box {len(self.rectangles)}: ({x1}, {y1}) - ({x2}, {y2})")
+        self.current_rectangle = None
+
     
-
-
-
 def main():
     root=tk.Tk()
     app=Generate_Certificates(root)
