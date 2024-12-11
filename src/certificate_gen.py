@@ -19,6 +19,9 @@ class Generate_Certificates:
         self.clear_button=tk.Button(self.button_frame,text="Clear Image",command=self.clear_boxes,state=tk.DISABLED,relief="flat",bg="#4CAF50",fg="white",font=("Helvetica",12,"bold"),padx=15,pady=10,activebackground="#45a049")
         self.clear_button.pack(side=tk.LEFT,padx=10)
 
+        self.clear_button=tk.Button(self.button_frame,text="Upload CSV",command=self.upload_csv,relief="flat",bg="#4CAF50",fg="white",font=("Helvetica",12,"bold"),padx=15,pady=10,activebackground="#45a049")
+        self.clear_button.pack(side=tk.LEFT,padx=10)
+
         self.canvas=tk.Canvas(self.master,bg="#292929")
         self.canvas.pack(expand=True, fill=tk.BOTH, padx=20, pady=10)
 
@@ -45,9 +48,15 @@ class Generate_Certificates:
         self.canvas.bind("<B1-Motion>", self.draw_box)
         self.canvas.bind("<ButtonRelease-1>", self.end_box)
 
+    def upload_csv(self):
+        ftypes = [("CSV Files","*.csv")]
+        csv_path = filedialog.askopenfilename(title="select a file",filetypes=ftypes)
+        if not csv_path:
+            return
+
     def upload_image(self):
         ftypes = [("Image files", "*.png *.jpg *.jpeg *.gif *.bmp *.ppm *.pgm"), ("All files", "*.*")]
-        file_path = filedialog.askopenfilename(title="Select an Image")
+        file_path = filedialog.askopenfilename(title="Select an Image",filetypes=ftypes)
         if not file_path:
             return
         self.clear_boxes()
