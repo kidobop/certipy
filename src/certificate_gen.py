@@ -16,7 +16,7 @@ class Generate_Certificates:
         self.upload_button=tk.Button(self.button_frame,text="Upload Image",command=self.upload_image,relief="flat",bg="#4CAF50",fg="white",font=("Helvetica",12,"bold"),padx=15,pady=10,activebackground="#45a049")
         self.upload_button.pack(side=tk.LEFT,padx=10)
 
-        self.clear_button=tk.Button(self.button_frame,text="Clear Image",state=tk.DISABLED,relief="flat",bg="#4CAF50",fg="white",font=("Helvetica",12,"bold"),padx=15,pady=10,activebackground="#45a049")
+        self.clear_button=tk.Button(self.button_frame,text="Clear Image",command=self.clear_boxes,state=tk.DISABLED,relief="flat",bg="#4CAF50",fg="white",font=("Helvetica",12,"bold"),padx=15,pady=10,activebackground="#45a049")
         self.clear_button.pack(side=tk.LEFT,padx=10)
 
         self.canvas=tk.Canvas(self.master,bg="#292929")
@@ -46,7 +46,31 @@ class Generate_Certificates:
         self.canvas.bind("<ButtonRelease-1>", self.end_box)
 
     def upload_image(self):
-        
+        ftypes = [("Image files", "*.png *.jpg *.jpeg *.gif *.bmp *.ppm *.pgm"), ("All files", "*.*")]
+        file_path = filedialog.askopenfilename(title="Select an Image")
+        if not file_path:
+            return
+        self.clear_boxes()
+        self.original_image = Image.open(file_path)
+        canvas_width = self.canvas.winfo_width() or 1000
+        canvas_height = self.canvas.winfo_height() or 70
+        img_ratio=self.original_image.width / self.original_image.height
+        canvas_ratio = canvas_width/canvas_height
+        if img_ratio > canvas_ratio:
+            new_width = min(self.original_image.width,canvas_width)
+            new_height = int(new_width / img_ratio)
+        else:
+            new_height = min(self.original_image.height, canvas_height)
+            new_width = int(new_height * img_ratio)
+        resized_image = self.original_image.resize((new_width,new_height),Image.LANCZOS)
+        self.displayed_image = ImageTk.PhotoImage(resized_image)
+        self.canvas.delete("all")
+        self.canvas_image = self.canvas.create_image(
+        canvas_width // 2,
+        canvas_height // 2,
+        image=self.displayed_image,
+        anchor=tk.CENTER)
+        self.clear_button.config(state=tk.NORMAL)
 
     def start_box(self,event):
         self.start_x = event.x
@@ -65,6 +89,13 @@ class Generate_Certificates:
         self.rectangles.append((x1,y1,x2,y2))
         self.coordinate_listbox.insert(tk.END, f"Box {len(self.rectangles)}: ({x1}, {y1}) - ({x2}, {y2})")
         self.current_rectangle = None
+
+    def clear_boxes(self):
+        for rect in self.canvas.find_all():
+            if rect != getattr(self,'canvas_image',None):
+                self.canvas.delete(rect)
+        self.rectangles.clear()
+        self.coordinate_listbox.delete(0,tk.END)
 
     
 def main():
