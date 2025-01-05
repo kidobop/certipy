@@ -19,8 +19,8 @@ class Generate_Certificates:
         self.clear_button=tk.Button(self.button_frame,text="Clear Image",command=self.clear_boxes,state=tk.DISABLED,relief="flat",bg="#4CAF50",fg="white",font=("Helvetica",12,"bold"),padx=15,pady=10,activebackground="#45a049")
         self.clear_button.pack(side=tk.LEFT,padx=10)
 
-        self.clear_button=tk.Button(self.button_frame,text="Upload CSV",command=self.upload_csv,relief="flat",bg="#4CAF50",fg="white",font=("Helvetica",12,"bold"),padx=15,pady=10,activebackground="#45a049")
-        self.clear_button.pack(side=tk.LEFT,padx=10)
+        self.uploadcsv_button=tk.Button(self.button_frame,text="Upload CSV",command=self.upload_csv,relief="flat",bg="#4CAF50",fg="white",font=("Helvetica",12,"bold"),padx=15,pady=10,activebackground="#45a049")
+        self.uploadcsv_button.pack(side=tk.LEFT,padx=10)
 
         self.canvas=tk.Canvas(self.master,bg="#292929")
         self.canvas.pack(expand=True, fill=tk.BOTH, padx=20, pady=10)
