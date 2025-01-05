@@ -23,6 +23,9 @@ class Generate_Certificates:
         self.uploadcsv_button = tk.Button(self.button_frame, text="Upload CSV", command=self.upload_csv, relief="flat", bg="#4CAF50", fg="white", font=("Helvetica", 12, "bold"), padx=15, pady=10, activebackground="#45a049")
         self.uploadcsv_button.pack(side=tk.LEFT, padx=10)
 
+        self.generate_bulk_button = tk.Button(self.button_frame, text="Generate Bulk Certificates", relief="flat", bg="#4CAF50", fg="white", font=("Helvetica", 12, "bold"), padx=15, pady=10, activebackground="#45a049")
+        self.generate_bulk_button.pack(side=tk.LEFT, padx=10)
+
         self.canvas = tk.Canvas(self.master, bg="#292929")
         self.canvas.pack(expand=True, fill=tk.BOTH, padx=20, pady=10)
 
